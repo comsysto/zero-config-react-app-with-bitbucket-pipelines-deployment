@@ -1,0 +1,43 @@
+# 
+# Build and Deploy React Application to GitHub Pages
+#
+image: node:5.11.0
+
+pipelines:
+  default:
+    - step:
+        script:
+          - echo "This script runs on all branches that don't have any specific pipeline assigned in 'branches'."
+  branches:
+    master:
+      - step:
+          script:
+            - echo "Building and Deploying the master branch."
+            - rm -rf .git # remove .git directory since we will clone another repo and that could lead to conflicts
+            - npm --version
+            - npm install
+            - npm run ndes replace "___TIMEST___" byCurrentTimetamp           in "src/deploy-info.js" -s
+            - npm run ndes replace "___BRANCH___" byValue "$BITBUCKET_BRANCH" in "src/deploy-info.js" -s
+            - npm run ndes replace "___COMMIT___" byValue "$BITBUCKET_COMMIT" in "src/deploy-info.js" -s
+            - npm run ndes replace "___SUBDIR___" byValue "prod" in "package.json" -s
+            - npm run build
+            - ls -la
+            - ls -la build
+            - npm run ndes deployToGitHubPages as "bitbucket-bot" withEmail "noreply@codeclou.io" withGitHubAuthUsername $GITHUB_AUTH_USER withGitHubAuthToken $GITHUB_AUTH_TOKEN toRepository $GITHUB_CLONE_URL fromSource build intoSubdirectory prod -s
+            - npm run ndes grepJson "$.homepage" from "package.json" withMessage "deployed to:" -s
+    feature-*:
+      - step:
+          script:
+            - echo "Building and Deploying feature branch."
+            - rm -rf .git # remove .git directory since we will clone another repo and that could lead to conflicts
+            - npm --version
+            - npm install
+            - npm run ndes replace "___TIMEST___" byCurrentTimetamp           in "src/deploy-info.js" -s
+            - npm run ndes replace "___BRANCH___" byValue "$BITBUCKET_BRANCH" in "src/deploy-info.js" -s
+            - npm run ndes replace "___COMMIT___" byValue "$BITBUCKET_COMMIT" in "src/deploy-info.js" -s
+            - npm run ndes replace "___SUBDIR___" byValue "branch-$BITBUCKET_BRANCH" in "package.json" -s
+            - npm run build
+            - ls -la
+            - ls -la build
+            - npm run ndes deployToGitHubPages as "bitbucket-bot" withEmail "noreply@codeclou.io" withGitHubAuthUsername $GITHUB_AUTH_USER withGitHubAuthToken $GITHUB_AUTH_TOKEN toRepository $GITHUB_CLONE_URL fromSource build intoSubdirectory "branch-$BITBUCKET_BRANCH" -s
+            - npm run ndes grepJson "$.homepage" from "package.json" withMessage "deployed to:" -s

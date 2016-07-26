@@ -1,0 +1,20 @@
+{
+  "name": "comsysto-zero-config-react-app",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "node-deploy-essentials": "0.0.2",
+    "react-scripts": "git+https://github.com/facebookincubator/create-react-app.git#9dc23a34847e023af7b97c1567fb9771abdcfa44"
+  },
+  "dependencies": {
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "ndes": "node ./node_modules/.bin/ndes"
+  },
+  "homepage": "https://codeclou-int.github.io/bitbucket-pipeline-app-demo/___SUBDIR___/"
+}
