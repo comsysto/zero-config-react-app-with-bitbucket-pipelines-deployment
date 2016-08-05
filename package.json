@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "node-deploy-essentials": "0.0.4",
+    "node-deploy-essentials": "0.0.5",
     "react-scripts": "git+https://github.com/facebookincubator/create-react-app.git#9dc23a34847e023af7b97c1567fb9771abdcfa44"
   },
   "dependencies": {
